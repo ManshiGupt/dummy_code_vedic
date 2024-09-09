@@ -5,38 +5,37 @@ import Image from 'next/image';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import Faq from './Faq';
 import { FaStar } from 'react-icons/fa';
-import DOMPurify from 'dompurify';
 
 interface Item {
     _id: string;
-  
-    experience: string;
-    language: string;
-    education: string;
-    profileImage: string;
-    location: string;
-    panditItem: {
-        name: string;
-        profileImage: string;
-        experience: string;
-        language: any;
-        education: string;
-        location: string;
-        about: string;
-        verified: boolean;
-    };
-    
-    poojaNames: string;
-    avgStars: string;
+    title: string;
+    date: string;
+    review: string;
+    subtitle: string;
+    images: string;
+    pandit: string;
+    minPrice: string;
+    maxPrice: string;
+    about: string;
+    poojaTag: string;
+    poojaDuration: string;
+    tithi: string;
+    aboutPooja: string;
+    category: string;
+    panditNo: string;
+    params: { name: string };
+    faq: string;
+    stars:string,   
+    avgStars:string
 }
 
-const PanditId = () => {
+const PoojaId = () => {
 
     const [data, setData] = useState<Item | null>(null);
     const [showModal, setShowModal] = useState(false);
     const pathname = usePathname();
     const searchParams = useSearchParams();
-    // const router = useRouter();
+    const router = useRouter();
     const handleGooglePlayClick = () => {
         window.open(' https://play.google.com/store/apps/details?id=com.aumgroup.vedic_pandit_app') ;
       };
@@ -59,9 +58,8 @@ const PanditId = () => {
 
                 if (id) {
 
-                    const response = await fetch(`https://vedic-pandit-server.onrender.com/get-pandit-by-id/${id}`);
+                    const response = await fetch(`https://vedic-pandit-server.onrender.com/get-pooja-by-id/${id}`);
                     const data = await response.json();
-                    console.log(data);
                     setData(data);
 
                 }
@@ -90,20 +88,26 @@ const PanditId = () => {
                 <div>
                     <div className="grid grid-cols-1 md:grid-cols-2 md:gap-8 items-center mb-8">
                         <div className="flex md:justify-end">
-                            <div className="w-[380px] h-[380px]  md:-mt-8 my-4">
+                            <div className="w-[500px]   my-4">
                                 <img
-                                    src={data.panditItem.profileImage}
-                                    alt={data.panditItem.name}
+                                    src={data.images}
+                                    alt={data.subtitle}
                                     className="rounded-lg w-full h-full"
                                 />
+                                {/* <div className='mt-10' >
+                                <p className='py-4'>How it Works</p>
+                                <p>Open the app</p>
+                                <p>Place an order</p>
+                                <p>Get free delivery</p>
+                                </div> */}
                             </div>
                         </div>
 
                         <div className="md:space-y-2 lg:pl-16  lg:pr-40">
-                            <h3 className="text-xl font-medium tracking-wider ">{data.panditItem.name}</h3>
-                            {/* {data.date &&  <p className="text-black">{data.date} | {data.tithi}</p>} */}
+                            <h3 className="text-base font-medium tracking-wider">{data.title}</h3>
+                            {data.date &&  <p className="text-black">{data.date} | {data.tithi}</p>}
                            
-                            {/* <p className="text-black">{data.review}</p> */}
+                            <p className="text-black">{data.review}</p>
                             
                             <div className='flex py-3'>
                     {Array.from({ length: 5 }, (_, index) => (
@@ -113,28 +117,51 @@ const PanditId = () => {
                           index < parseInt(data.avgStars ) ? "text-yellow-500" : "text-gray-300"
                         }`}
                       />
-                      
                     ))}
                     <p className='px-2'>({ data.avgStars})</p>
                   </div>
-                            <p className="text-black text-base">Experiences: {data.panditItem.experience}</p>
-                            <p className="text-black text-base">Languages: {data.panditItem.language.join(' , ')}</p>
-
-                            <p className="text-black text-base">Education: {data.panditItem.education}</p>
-                            <p className="text-black text-base">Location: {data.panditItem.location}</p>
-                            <p className="text-black text-base">Verified: {data.panditItem.verified}</p>
-                            {/* <div className='pt-2'>
+                            <p className="text-black text-base">{data.subtitle}</p>
+                            <div className='pt-2'>
                             <p className="text-black">Pooja Duration: {data.poojaDuration} hour(s)</p>
                             <p className="text-black">Number of Pandit(s): {data.panditNo}</p>
-                            </div> */}
-                            {/* <div className="flex space-x-2 text-black py-4">
+                            </div>
+                            <div className="flex space-x-2 text-black py-4">
                                 <p>₹{data.minPrice} -</p>
                                 <p>₹{data.maxPrice}</p>
-                            </div> */}
-                            
+                            </div>
+                            <div className="flex gap-4 hover:cursor-pointer">
+                                <div className="border-2 rounded-lg h-20 w-20 justify-center items-center px-2 py-2">
+                                    <img
+                                        src='/shopping-bag.png '
+                                        className='w-auto h-6 text-center justify-center px-3 '
+                                    />
+                                    <p className="text-xs pt-2">Samagrih</p>
+                                </div>
+                                <div className="border-2 rounded-lg h-20 w-20 justify-center items-center px-2 py-2">
+                                    <img
+                                        src='/atomic.png '
+                                        className='w-auto h-6 text-center justify-center px-3 '
+                                    />
+                                    <p className="text-xs pt-2 px-2">Mantra</p>
+                                </div>
+                                <div className="border-2 rounded-lg h-20 w-20 justify-center items-center px-3 py-2">
+                                    <img
+                                        src='/pooja.png '
+                                        className='w-auto h-6 text-center justify-center px-3 '
+                                    />
+                                    <p className="text-xs pt-2 px-3">Aarti</p>
+                                </div>
+                                <div className="border-2 rounded-lg h-20 w-20 justify-center items-center px-2 py-2">
+                                    <img
+                                        src='/play-icon.png '
+                                        className='w-auto h-6 text-center justify-center px-3 '
+                                    />
+                                    <p className="text-xs pt-2 px-2">Bhajan</p>
+                                </div>
+                            </div>
                             <div className="md:py-10 pt-6">
                                 <button
-                                    className="bg-black text-white rounded-md px-32 py-2"
+                                    className="bg-black text-white rounded-md px-36 py-2"
                                     onClick={handleBookNowClick}
                                 >
                                     <div className='flex gap-1'>Book  
@@ -147,12 +174,9 @@ const PanditId = () => {
 
                     </div>
                     <div className="lg:px-40 md:pb-10 md:pl-4 pb-2">
-                        <h4 className="font-semibold pb-4 tracking-wider md:text-2xl">About</h4>
-                        {/* Render 'about' field as HTML */}
-                        <p
-                            className="text-black"
-                            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(data.panditItem.about) }} // Optional: Sanitize the content
-                        />
+                        <h4 className="font-semibold pb-4 tracking-wider">About </h4>
+                        <p className="text-black">{data.about}</p>
+                        <p>{data.aboutPooja}</p>
                     </div>
                   
                 </div>
@@ -220,8 +244,4 @@ const PanditId = () => {
     );
 };
 
-export default PanditId;
-
-
-
-
+export default PoojaId;

@@ -50,6 +50,7 @@ const PujaDrawer = ({
   const[pdfTitle, setPdfTitle]= useState("");
   const[pdfUrl, setPdfUrl]=  useState("");
   const[pdfIndex, setPdfIndex]= useState("");
+  const[deleter, setDeleter]= useState("");
 
   useEffect(() => {
     if (drawerData) {
@@ -134,15 +135,7 @@ const PujaDrawer = ({
     setIsModalOpen(true);
   };
 
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
   
-  
-
   const handleSubmit = async () => {
     const errorMessage = validateForm();
     if (errorMessage) {
@@ -193,15 +186,22 @@ const PujaDrawer = ({
 
   };
 
-  const handleDelete=async (deletePooja)=>{
+  
+
+  const handleDeleteFaq=async (deletePooja, faq)=>{
     // alert(index.title);
-    const a = faq.filter((data)=> data !== deletePooja);
-    setFaq(a);
+    const f = faq.filter((data)=> data !== deletePooja);
+    setFaq(f);
     
 
   }
-  const handleDletePdf =async(deletePdf)=>{
-    const b = poojaBookPdf.filter((data)=> data !== deletePdf); 
+  const handleDeletePdf =async(deletePooja, poojaBookPdf)=>{
+    const f = poojaBookPdf.filter((data)=> data !== deletePooja); 
+    setPoojaBookPdf(f)
+  }
+  const handleDeleteBlog =async(deletePooja, poojaBlog)=>{
+    const f = poojaBlog.filter((data)=> data !== deletePooja); 
+    setPoojaBlog(f)
   }
   
 
@@ -359,8 +359,9 @@ const PujaDrawer = ({
                   )
                 }
               />
-                <button className="justify-end text-white border-solid border-2 rounded-lg p-2 mb-5 mt-2 w-24 bg-slate-500" 
-                onClick={(()=>handleDelete(item))}>Delete</button>
+              {action=="Edit" &&  <button className="justify-end text-white border-solid border-2 rounded-lg p-2 mb-5 mt-2 w-24 bg-slate-500" 
+                onClick={(()=>handleDeleteFaq(item, faq))}>Delete</button>}
+               
             </div>
           ))}
 
@@ -414,13 +415,16 @@ const PujaDrawer = ({
                   )
                 }
               />
-               <button className="justify-end text-white border-solid border-2 rounded-lg p-2 mb-5 mt-2 w-24 bg-slate-500" 
-                onClick={(()=>handleDelete(item))}>Delete</button>
+              {action="Edit" &&   <button className="justify-end text-white border-solid border-2 rounded-lg p-2 mb-5 mt-2 w-24 bg-slate-500" 
+                onClick={(()=>handleDeletePdf(item, poojaBookPdf ))}>Delete</button>}
+             
             </div>
           ))}
          </div> 
 
          <div className="bg-gray-500 my-2 text-white py-4 flex justify-between px-2">
+
+
             <p >Pooja Blog</p>
             {action !== "View" && (
               <Button type="primary" className="bg-white text-gray-700 hover:bg-gray-500 shadow-lg" onClick={showModal}>
@@ -471,7 +475,7 @@ const PujaDrawer = ({
                 placeholder="Thumbnail"
                 value={item.thumbnail}
                 onChange={(e) =>
-                  setPoojaBlog(
+                  setPoojaBlog( 
                     poojaBlog.map((f, i) =>
                       i === index ? { ...f, thumbnail: e.target.value } : f
                     )
@@ -479,8 +483,8 @@ const PujaDrawer = ({
                 }
                 readOnly={isReadOnly}
               />
-              <button className="justify-end text-white border-solid border-2 rounded-lg p-2 mb-5 mt-2 w-24 bg-slate-500" 
-                onClick={(()=>handleDelete(item))}>Delete</button>
+             {action="Edit" &&   <button className="justify-end text-white border-solid border-2 rounded-lg p-2 mb-5 mt-2 w-24 bg-slate-500" 
+                onClick={(()=>handleDeleteBlog(item, poojaBlog))}>Delete</button>}
             </div>
           ))}
         </div>
